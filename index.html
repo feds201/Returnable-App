@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Schedule</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration to extend default theme, specifically for Inter font
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'], // Custom font family
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center m-0 font-inter bg-gradient-to-br from-red-100 to-red-200 p-4">
+    <!-- Logo image with Tailwind classes for styling -->
+    <img src="https://placehold.co/220x220/4a90e2/ffffff?text=201+Logo" alt="201 Logo" class="mt-10 max-w-xs h-auto rounded-2xl shadow-xl border-4 border-white">
+
+    <!-- Form container with Tailwind classes for styling -->
+    <div class="mt-8 text-center bg-white p-8 rounded-2xl shadow-lg max-w-md w-full">
+        <form action="#" method="POST" class="flex flex-col gap-4 w-full">
+            <!-- Label for the date selection -->
+            <label for="pickup-date-carousel" class="text-lg text-gray-800 font-medium mb-1 text-left">Pick Up Date:</label>
+
+            <!-- Carousel container for dates -->
+            <div class="relative flex items-center justify-center w-full">
+                <!-- Previous button for carousel navigation -->
+                <button type="button" id="prev-carousel-button" class="carousel-nav-button absolute left-0 p-2 rounded-full bg-red-500 text-white shadow-md hover:bg-red-600 transition-colors z-10 -ml-4" aria-label="Previous Date">&lt;</button>
+                
+                <!-- Date carousel display area -->
+                <div id="date-carousel" class="flex overflow-x-hidden scroll-smooth py-2 px-1 w-full justify-start items-center">
+                    <!-- Dates will be dynamically populated here by JavaScript -->
+                    <div class="text-gray-500 text-center w-full">Loading dates...</div>
+                </div>
+
+                <!-- Next button for carousel navigation -->
+                <button type="button" id="next-carousel-button" class="carousel-nav-button absolute right-0 p-2 rounded-full bg-red-500 text-white shadow-md hover:bg-red-600 transition-colors z-10 -mr-4" aria-label="Next Date">&gt;</button>
+            </div>
+
+            <!-- Hidden input fields to store the selected date, start time, and end time -->
+            <input type="hidden" id="selected-pickup-date" name="pickup-date">
+            <input type="hidden" id="selected-start-time" name="start-time">
+            <input type="hidden" id="selected-end-time" name="end-time">
+
+            <!-- Label for delivery address input -->
+            <label for="address" class="text-lg text-gray-800 font-medium mb-1 text-left">Delivery Address:</label>
+            <!-- Input field for delivery address -->
+            <input type="text" id="address" name="address" placeholder="Please enter your address" required class="p-3 border-2 border-red-200 rounded-md w-full text-base bg-red-50 focus:border-red-500 focus:outline-none transition-colors">
+            
+            <!-- Submit button -->
+            <button type="submit" class="p-3 bg-gradient-to-r from-red-500 to-blue-400 text-white border-none rounded-md cursor-pointer text-lg font-semibold shadow-md hover:from-red-600 hover:to-blue-500 transform hover:-translate-y-0.5 transition-all">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        /**
+         * Populates the date carousel with event data fetched from the Google Apps Script.
+         * Each item in the carousel displays the date, start time, and end time.
+         * Clicking an item selects it and updates hidden input fields.
+         * @param {Array<Object>} eventData An array of objects, each containing 'date', 'startTime', and 'endTime'.
+         */
+        function populateDates(eventData) {
+            const carousel = document.getElementById('date-carousel');
+            carousel.innerHTML = ''; // Clear existing items
+
+            // Display message if no dates are available
+            if (eventData.length === 0) {
+                carousel.innerHTML = '<div class="text-gray-500 text-center w-full">No dates available</div>';
+                return;
+            }
+
+            // Iterate over each event item to create a carousel item
+            eventData.forEach((item, index) => {
+                // Parse the date string properly
+                const date = new Date(item.date);
+                
+                // Format date for display (e.g., "Jul 24")
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                // Parse start and end times - they're in ISO format with 1899 date
+                // We only need the time portion, so we'll extract it manually
+                const startTime = item.startTime ? formatTimeFromISO(item.startTime) : 'N/A';
+                const endTime = item.endTime ? formatTimeFromISO(item.endTime) : 'N/A';
+
+                // Create the div element for the carousel item
+                const itemDiv = document.createElement('div');
+                // Apply Tailwind classes for styling: fixed width, padding, margin, border, rounded corners, text alignment, cursor, transitions, hover effects
+                itemDiv.classList.add('date-carousel-item', 'flex-shrink-0', 'w-32', 'p-3', 'mx-2', 'border-2', 'border-red-200', 'rounded-lg', 'text-center', 'cursor-pointer', 'transition-all', 'duration-200', 'hover:shadow-md', 'hover:border-red-400');
+                
+                // Set the inner HTML of the carousel item
+                itemDiv.innerHTML = `
+                    <div class="font-semibold text-lg text-gray-700">${formattedDate}</div>
+                    <div class="text-sm text-gray-500">${startTime} - ${endTime}</div>
+                `;
+                
+                // Store the full date and time strings as data attributes for easy retrieval
+                itemDiv.dataset.date = item.date;
+                itemDiv.dataset.startTime = item.startTime;
+                itemDiv.dataset.endTime = item.endTime;
+
+                // Add click event listener to handle selection of a date item
+                itemDiv.addEventListener('click', () => {
+                    // Remove 'active' styling from all other carousel items
+                    document.querySelectorAll('.date-carousel-item').forEach(el => {
+                        el.classList.remove('bg-red-500', 'text-white', 'border-red-500');
+                        el.classList.add('bg-white', 'text-gray-700', 'border-red-200');
+                    });
+
+                    // Apply 'active' styling to the clicked item
+                    itemDiv.classList.add('bg-red-500', 'text-white', 'border-red-500');
+                    itemDiv.classList.remove('bg-white', 'text-gray-700', 'border-red-200');
+
+                    // Update the hidden input fields with the selected date and times
+                    document.getElementById('selected-pickup-date').value = item.date;
+                    document.getElementById('selected-start-time').value = item.startTime;
+                    document.getElementById('selected-end-time').value = item.endTime;
+                });
+
+                carousel.appendChild(itemDiv);
+
+                // Automatically select the first item when the carousel is populated
+                if (index === 0) {
+                    itemDiv.click(); // Simulate a click to apply active state and set hidden inputs
+                }
+            });
+
+            // Get references to the navigation buttons using their new IDs
+            const prevButton = document.getElementById('prev-carousel-button');
+            const nextButton = document.getElementById('next-carousel-button');
+            // Calculate the scroll amount based on item width and margins (w-32 is 128px, mx-2 is 8px on each side)
+            const scrollAmount = 128 + (8 * 2); // Item width + horizontal margins
+
+            // Add event listener for the previous button
+            prevButton.addEventListener('click', () => {
+                carousel.scrollLeft -= scrollAmount; // Scroll left by one item's width
+            });
+
+            // Add event listener for the next button
+            nextButton.addEventListener('click', () => {
+                carousel.scrollLeft += scrollAmount; // Scroll right by one item's width
+            });
+        }
+
+        /**
+         * Formats a time from ISO string format to 12-hour format
+         * @param {string} isoString - ISO time string (e.g., "1899-12-30T17:00:00.000Z")
+         * @returns {string} Formatted time string (e.g., "05:00 PM")
+         */
+        function formatTimeFromISO(isoString) {
+            try {
+                const date = new Date(isoString);
+                if (isNaN(date.getTime())) {
+                    return 'N/A';
+                }
+                return date.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    hour12: true,
+                    timeZone: 'UTC' // Since the times are in UTC format
+                });
+            } catch (error) {
+                console.error('Error parsing time:', error);
+                return 'N/A';
+            }
+        }
+
+        // Initial state: Display a loading message in the carousel while data is being fetched
+        document.getElementById('date-carousel').innerHTML = '<div class="text-gray-500 text-center w-full">Loading dates...</div>';
+
+        // Fetch dates from the provided Google Apps Script web app URL
+        const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxQ90CZG79JXejJXF8_MYpXrLcb5p9WNMQ6r6fUNqAcB7P--KttpxSGl8q2WYm7Rcbm/exec';
+        
+        fetch(appsScriptUrl)
+            .then(response => {
+                // Check if the network request was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); // Parse the JSON response
+            })
+            .then(data => populateDates(data)) // Call populateDates with the fetched data
+            .catch(error => {
+                // Log and display an error message if fetching fails
+                console.error('Error fetching dates:', error);
+                document.getElementById('date-carousel').innerHTML = '<div class="text-red-500 text-center w-full">Failed to load dates. Please try again later.</div>';
+            });
+    </script>
+</body>
+</html>
