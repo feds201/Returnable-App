@@ -4,171 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delivery Schedule</title>
-    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Tailwind CSS configuration to extend default theme, specifically for Inter font
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        inter: ['Inter', 'sans-serif'], // Custom font family
+                        inter: ['Inter', 'sans-serif'],
                     },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slideIn': 'slideIn 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        slideIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(239, 68, 68, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(239, 68, 68, 0.6)' },
+                        }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
+                    }
                 }
             }
         }
     </script>
-    <!-- Google Fonts - Inter for a modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center m-0 font-inter bg-gradient-to-br from-red-100 to-red-200 p-4">
-    <!-- Logo image with Tailwind classes for styling -->
-    <img src="https://placehold.co/220x220/4a90e2/ffffff?text=201+Logo" alt="201 Logo" class="mt-10 max-w-xs h-auto rounded-2xl shadow-xl border-4 border-white">
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter overflow-x-hidden">
+    
+    <!-- Animated background elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow animation-delay-2000"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-red-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse-slow animation-delay-4000"></div>
+    </div>
 
-    <!-- Form container with Tailwind classes for styling -->
-    <div class="mt-8 text-center bg-white p-8 rounded-2xl shadow-lg max-w-md w-full">
-        <form action="#" method="POST" class="flex flex-col gap-4 w-full">
-            <!-- Label for the date selection -->
-            <label for="pickup-date-carousel" class="text-lg text-gray-800 font-medium mb-1 text-left">Pick Up Date:</label>
-
-            <!-- Carousel container for dates -->
-            <div class="relative flex items-center justify-center w-full">
-                <!-- Previous button for carousel navigation -->
-                <button type="button" id="prev-carousel-button" class="carousel-nav-button absolute left-0 p-2 rounded-full bg-red-500 text-white shadow-md hover:bg-red-600 transition-colors z-10 -ml-4" aria-label="Previous Date">&lt;</button>
-                
-                <!-- Date carousel display area -->
-                <div id="date-carousel" class="flex overflow-x-hidden scroll-smooth py-2 px-1 w-full justify-start items-center">
-                    <!-- Dates will be dynamically populated here by JavaScript -->
-                    <div class="text-gray-500 text-center w-full">Loading dates...</div>
-                </div>
-
-                <!-- Next button for carousel navigation -->
-                <button type="button" id="next-carousel-button" class="carousel-nav-button absolute right-0 p-2 rounded-full bg-red-500 text-white shadow-md hover:bg-red-600 transition-colors z-10 -mr-4" aria-label="Next Date">&gt;</button>
+    <!-- Main container -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+        
+        <!-- Header section with logo and title -->
+        <div class="text-center mb-12 animate-slideIn">
+            <div class="relative inline-block">
+                <img src="https://i.imgur.com/jB0FYA1.png" 
+                     alt="201 Logo" >
             </div>
+            <h1 class="mt-8 text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 tracking-tight">
+                Returnable Schedule
+            </h1>
+            <p class="mt-3 text-lg text-purple-200/80 font-medium">Thank You</p>
+        </div>
 
-            <!-- Hidden input fields to store the selected date, start time, and end time -->
-            <input type="hidden" id="selected-pickup-date" name="pickup-date">
-            <input type="hidden" id="selected-start-time" name="start-time">
-            <input type="hidden" id="selected-end-time" name="end-time">
+        <!-- Main form card -->
+        <div class="w-full max-w-lg animate-slideIn animation-delay-200">
+            <div class="relative">
+                <!-- Glassmorphism background -->
+                <div class="absolute inset-0 bg-white/10 backdrop-blur-lg rounded-3xl"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-3xl"></div>
+                
+                <!-- Form content -->
+                <div class="relative p-8 md:p-10">
+                    <form action="#" method="POST" class="space-y-8">
+                        
+                        <!-- Date selection section -->
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-calendar-alt text-white text-lg"></i>
+                                </div>
+                                <label for="pickup-date-carousel" class="text-xl font-bold text-white">
+                                    Pick Your Date
+                                </label>
+                            </div>
 
-            <!-- Label for delivery address input -->
-            <label for="address" class="text-lg text-gray-800 font-medium mb-1 text-left">Delivery Address:</label>
-            <!-- Input field for delivery address -->
-            <input type="text" id="address" name="address" placeholder="Please enter your address" required class="p-3 border-2 border-red-200 rounded-md w-full text-base bg-red-50 focus:border-red-500 focus:outline-none transition-colors">
-            
-            <!-- Submit button -->
-            <button type="submit" class="p-3 bg-gradient-to-r from-red-500 to-blue-400 text-white border-none rounded-md cursor-pointer text-lg font-semibold shadow-md hover:from-red-600 hover:to-blue-500 transform hover:-translate-y-0.5 transition-all">Submit</button>
-        </form>
+                            
+<!-- Enhanced carousel container -->
+<div class="relative">
+    <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
+    <div class="relative p-6">
+        <!-- Date carousel with swipe functionality -->
+        <div id="date-carousel" 
+             class="flex overflow-x-auto scroll-smooth space-x-4 scrollbar-hide touch-pan-x snap-x snap-mandatory"
+             style="scrollbar-width: none; -ms-overflow-style: none;">
+            <div class="flex items-center justify-center w-full text-purple-200 text-lg">
+                <i class="fas fa-spinner animate-spin mr-3"></i>
+                Loading dates...
+            </div>
+        </div>
+        
+        <!-- Swipe indicator -->
+        <div class="flex justify-center mt-4 space-x-2">
+            <div class="w-2 h-2 rounded-full bg-white/30"></div>
+            <div class="w-6 h-2 rounded-full bg-white/60"></div>
+            <div class="w-2 h-2 rounded-full bg-white/30"></div>
+        </div>
+        
+        <!-- Swipe hint -->
+        <div class="text-center mt-3">
+            <p class="text-sm text-purple-200/60 flex items-center justify-center">
+                <i class="fas fa-hand-pointer mr-2 animate-pulse"></i>
+                Swipe to browse dates
+            </p>
+        </div>
+    </div>
+</div>
+
+                        </div>
+
+                        <!-- Hidden inputs -->
+                        <input type="hidden" id="selected-pickup-date" name="pickup-date">
+                        <input type="hidden" id="selected-start-time" name="start-time">
+                        <input type="hidden" id="selected-end-time" name="end-time">
+
+                        <!-- Address section -->
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-white text-lg"></i>
+                                </div>
+                                <label for="address" class="text-xl font-bold text-white">
+                                    Delivery Address
+                                </label>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
+                                <input type="text" 
+                                       id="address" 
+                                       name="address" 
+                                       placeholder="Enter your delivery address..." 
+                                       required 
+                                       class="relative w-full p-4 bg-transparent border-2 border-white/20 rounded-2xl text-white placeholder-purple-200/60 text-lg focus:border-white/60 focus:outline-none transition-all duration-300 focus:bg-white/5">
+                            </div>
+                        </div>
+                        
+                        <!-- Submit button -->
+                        <button type="submit" 
+                                class="w-full p-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-red-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-red-600 via-pink-600 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="relative flex items-center justify-center space-x-3">
+                                <span>Schedule Delivery</span>
+                                <i class="fas fa-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-purple-200/60 animate-slideIn animation-delay-400">
+            <p class="text-sm">Created with ❤️ by FEDS Programming Team</p>
+        </div>
     </div>
 
     <script>
-        /**
-         * Populates the date carousel with event data fetched from the Google Apps Script.
-         * Each item in the carousel displays the date, start time, and end time.
-         * Clicking an item selects it and updates hidden input fields.
-         * @param {Array<Object>} eventData An array of objects, each containing 'date', 'startTime', and 'endTime'.
-         */
-        function populateDates(eventData) {
-            const carousel = document.getElementById('date-carousel');
-            carousel.innerHTML = ''; // Clear existing items
+      function populateDates(eventData) {
+    const carousel = document.getElementById('date-carousel');
+    carousel.innerHTML = '';
 
-            // Display message if no dates are available
-            if (eventData.length === 0) {
-                carousel.innerHTML = '<div class="text-gray-500 text-center w-full">No dates available</div>';
-                return;
-            }
+    if (eventData.length === 0) {
+        carousel.innerHTML = `
+            <div class="flex items-center justify-center w-full text-purple-200 text-lg">
+                <i class="fas fa-exclamation-circle mr-3"></i>
+                No dates available
+            </div>
+        `;
+        return;
+    }
 
-            // Iterate over each event item to create a carousel item
-            eventData.forEach((item, index) => {
-                // Parse the date string properly
-                const date = new Date(item.date);
-                
-                // Format date for display (e.g., "Jul 24")
-                const formattedDate = date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric'
-                });
+    eventData.forEach((item, index) => {
+        const date = new Date(item.date);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
 
-                // Parse start and end times - they're in ISO format with 1899 date
-                // We only need the time portion, so we'll extract it manually
-                const startTime = item.startTime ? formatTimeFromISO(item.startTime) : 'N/A';
-                const endTime = item.endTime ? formatTimeFromISO(item.endTime) : 'N/A';
+        const startTime = item.startTime ? formatTimeFromISO(item.startTime) : 'N/A';
+        const endTime = item.endTime ? formatTimeFromISO(item.endTime) : 'N/A';
 
-                // Create the div element for the carousel item
-                const itemDiv = document.createElement('div');
-                // Apply Tailwind classes for styling: fixed width, padding, margin, border, rounded corners, text alignment, cursor, transitions, hover effects
-                itemDiv.classList.add('date-carousel-item', 'flex-shrink-0', 'w-32', 'p-3', 'mx-2', 'border-2', 'border-red-200', 'rounded-lg', 'text-center', 'cursor-pointer', 'transition-all', 'duration-200', 'hover:shadow-md', 'hover:border-red-400');
-                
-                // Set the inner HTML of the carousel item
-                itemDiv.innerHTML = `
-                    <div class="font-semibold text-lg text-gray-700">${formattedDate}</div>
-                    <div class="text-sm text-gray-500">${startTime} - ${endTime}</div>
-                `;
-                
-                // Store the full date and time strings as data attributes for easy retrieval
-                itemDiv.dataset.date = item.date;
-                itemDiv.dataset.startTime = item.startTime;
-                itemDiv.dataset.endTime = item.endTime;
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add(
+            'date-carousel-item', 'flex-shrink-0', 'w-36', 'cursor-pointer', 
+            'transform', 'transition-all', 'duration-300', 'hover:scale-105',
+            'hover:-translate-y-2', 'snap-center'
+        );
+        
+        itemDiv.innerHTML = `
+            <div class="relative group">
+                <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300"></div>
+                <div class="relative p-4 text-center">
+                    <div class="text-sm font-medium text-purple-200/80 mb-1">${dayName}</div>
+                    <div class="text-xl font-bold text-white mb-2">${formattedDate}</div>
+                    <div class="text-xs text-purple-200/70 space-y-1">
+                        <div class="flex items-center justify-center space-x-1">
+                            <i class="fas fa-clock text-xs"></i>
+                            <span>${startTime}</span>
+                        </div>
+                        <div class="text-purple-300/50">to</div>
+                        <div class="flex items-center justify-center space-x-1">
+                            <i class="fas fa-clock text-xs"></i>
+                            <span>${endTime}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        itemDiv.dataset.date = item.date;
+        itemDiv.dataset.startTime = item.startTime;
+        itemDiv.dataset.endTime = item.endTime;
 
-                // Add click event listener to handle selection of a date item
-                itemDiv.addEventListener('click', () => {
-                    // Remove 'active' styling from all other carousel items
-                    document.querySelectorAll('.date-carousel-item').forEach(el => {
-                        el.classList.remove('bg-red-500', 'text-white', 'border-red-500');
-                        el.classList.add('bg-white', 'text-gray-700', 'border-red-200');
-                    });
-
-                    // Apply 'active' styling to the clicked item
-                    itemDiv.classList.add('bg-red-500', 'text-white', 'border-red-500');
-                    itemDiv.classList.remove('bg-white', 'text-gray-700', 'border-red-200');
-
-                    // Update the hidden input fields with the selected date and times
-                    document.getElementById('selected-pickup-date').value = item.date;
-                    document.getElementById('selected-start-time').value = item.startTime;
-                    document.getElementById('selected-end-time').value = item.endTime;
-                });
-
-                carousel.appendChild(itemDiv);
-
-                // Automatically select the first item when the carousel is populated
-                if (index === 0) {
-                    itemDiv.click(); // Simulate a click to apply active state and set hidden inputs
-                }
+        itemDiv.addEventListener('click', () => {
+            document.querySelectorAll('.date-carousel-item').forEach(el => {
+                const bgDiv = el.querySelector('.absolute');
+                bgDiv.className = 'absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300';
             });
 
-            // Get references to the navigation buttons using their new IDs
+            const selectedBg = itemDiv.querySelector('.absolute');
+            selectedBg.className = 'absolute inset-0 bg-gradient-to-br from-red-500/80 to-pink-500/80 rounded-2xl backdrop-blur-sm border-2 border-red-400 shadow-xl shadow-red-500/50 transition-all duration-300';
+
+            document.getElementById('selected-pickup-date').value = item.date;
+            document.getElementById('selected-start-time').value = item.startTime;
+            document.getElementById('selected-end-time').value = item.endTime;
+            
+            // Add haptic feedback for mobile
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        });
+
+        carousel.appendChild(itemDiv);
+
+        if (index === 0) {
+            setTimeout(() => itemDiv.click(), 100);
+        }
+    });
+
+    setupSwipeIndicators();
+}
+
+      
+      function setupCarouselNavigation() {
             const prevButton = document.getElementById('prev-carousel-button');
             const nextButton = document.getElementById('next-carousel-button');
-            // Calculate the scroll amount based on item width and margins (w-32 is 128px, mx-2 is 8px on each side)
-            const scrollAmount = 128 + (8 * 2); // Item width + horizontal margins
+            const carousel = document.getElementById('date-carousel');
+            const scrollAmount = 152; // w-36 + spacing
 
-            // Add event listener for the previous button
             prevButton.addEventListener('click', () => {
-                carousel.scrollLeft -= scrollAmount; // Scroll left by one item's width
+                carousel.scrollLeft -= scrollAmount;
             });
 
-            // Add event listener for the next button
             nextButton.addEventListener('click', () => {
-                carousel.scrollLeft += scrollAmount; // Scroll right by one item's width
+                carousel.scrollLeft += scrollAmount;
             });
         }
 
-        /**
-         * Formats a time from ISO string format to 12-hour format
-         * @param {string} isoString - ISO time string (e.g., "1899-12-30T17:00:00.000Z")
-         * @returns {string} Formatted time string (e.g., "05:00 PM")
-         */
         function formatTimeFromISO(isoString) {
             try {
                 const date = new Date(isoString);
-                if (isNaN(date.getTime())) {
-                    return 'N/A';
-                }
+                if (isNaN(date.getTime())) return 'N/A';
                 return date.toLocaleTimeString('en-US', { 
                     hour: '2-digit', 
                     minute: '2-digit', 
                     hour12: true,
-                    timeZone: 'UTC' // Since the times are in UTC format
+                    timeZone: 'UTC'
                 });
             } catch (error) {
                 console.error('Error parsing time:', error);
@@ -176,26 +288,115 @@
             }
         }
 
-        // Initial state: Display a loading message in the carousel while data is being fetched
-        document.getElementById('date-carousel').innerHTML = '<div class="text-gray-500 text-center w-full">Loading dates...</div>';
+        // Enhanced loading state
+        document.getElementById('date-carousel').innerHTML = `
+            <div class="flex items-center justify-center w-full text-purple-200 text-lg">
+                <i class="fas fa-spinner animate-spin mr-3"></i>
+                Loading dates...
+            </div>
+        `;
 
-        // Fetch dates from the provided Google Apps Script web app URL
         const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxQ90CZG79JXejJXF8_MYpXrLcb5p9WNMQ6r6fUNqAcB7P--KttpxSGl8q2WYm7Rcbm/exec';
         
         fetch(appsScriptUrl)
             .then(response => {
-                // Check if the network request was successful
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json(); // Parse the JSON response
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
             })
-            .then(data => populateDates(data)) // Call populateDates with the fetched data
+            .then(data => populateDates(data))
             .catch(error => {
-                // Log and display an error message if fetching fails
                 console.error('Error fetching dates:', error);
-                document.getElementById('date-carousel').innerHTML = '<div class="text-red-500 text-center w-full">Failed to load dates. Please try again later.</div>';
+                document.getElementById('date-carousel').innerHTML = `
+                    <div class="flex items-center justify-center w-full text-red-400 text-lg">
+                        <i class="fas fa-exclamation-triangle mr-3"></i>
+                        Failed to load dates
+                    </div>
+                `;
             });
+
+        // Add staggered animation delays
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.animate-slideIn');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+        function setupSwipeIndicators() {
+    const carousel = document.getElementById('date-carousel');
+    const indicators = document.querySelectorAll('.w-2, .w-6');
+    
+    // Update indicators based on scroll position
+    carousel.addEventListener('scroll', () => {
+        const scrollLeft = carousel.scrollLeft;
+        const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
+        const scrollPercentage = scrollLeft / scrollWidth;
+        
+        // Reset all indicators
+        indicators.forEach(indicator => {
+            indicator.className = 'w-2 h-2 rounded-full bg-white/30 transition-all duration-300';
+        });
+        
+        // Highlight current indicator
+        const currentIndex = Math.round(scrollPercentage * (indicators.length - 1));
+        if (indicators[currentIndex]) {
+            indicators[currentIndex].className = 'w-6 h-2 rounded-full bg-white/60 transition-all duration-300';
+        }
+    });
+    
+    // Hide swipe hint after first interaction
+    let hasInteracted = false;
+    carousel.addEventListener('scroll', () => {
+        if (!hasInteracted) {
+            hasInteracted = true;
+            const swipeHint = document.querySelector('.text-purple-200\\/60').parentElement;
+            swipeHint.style.opacity = '0';
+            setTimeout(() => swipeHint.style.display = 'none', 300);
+        }
+    });
+}
+
+// Enhanced touch handling for better swipe experience
+function setupTouchHandling() {
+    const carousel = document.getElementById('date-carousel');
+    let isScrolling = false;
+    
+    carousel.addEventListener('touchstart', () => {
+        isScrolling = true;
+    });
+    
+    carousel.addEventListener('touchend', () => {
+        setTimeout(() => {
+            isScrolling = false;
+        }, 100);
+    });
+    
+    // Prevent click events during scrolling
+    carousel.addEventListener('click', (e) => {
+        if (isScrolling) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
+}
+
+// Add CSS for hiding scrollbars
+const style = document.createElement('style');
+style.textContent = `
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize touch handling when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    setupTouchHandling();
+});
+
     </script>
 </body>
 </html>
