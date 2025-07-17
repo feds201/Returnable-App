@@ -96,7 +96,7 @@
         <!-- Date carousel with swipe functionality -->
         <div id="date-carousel" 
              class="flex overflow-x-auto scroll-smooth space-x-4 scrollbar-hide touch-pan-x snap-x snap-mandatory"
-             style="scrollbar-width: none; -ms-overflow-style: none;">
+             style="scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x;">
             <div class="flex items-center justify-center w-full text-purple-200 text-lg">
                 <i class="fas fa-spinner animate-spin mr-3"></i>
                 Loading dates...
@@ -227,7 +227,38 @@
         itemDiv.dataset.startTime = item.startTime;
         itemDiv.dataset.endTime = item.endTime;
 
-        itemDiv.addEventListener('click', () => {
+        // Improved mobile interaction handling
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isTouchMove = false;
+
+        itemDiv.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isTouchMove = false;
+        }, { passive: true });
+
+        itemDiv.addEventListener('touchmove', (e) => {
+            const touchEndX = e.touches[0].clientX;
+            const touchEndY = e.touches[0].clientY;
+            const deltaX = Math.abs(touchEndX - touchStartX);
+            const deltaY = Math.abs(touchEndY - touchStartY);
+            
+            // If movement is more than 10px, consider it a scroll
+            if (deltaX > 10 || deltaY > 10) {
+                isTouchMove = true;
+            }
+        }, { passive: true });
+
+        const selectDate = (e) => {
+            // Prevent action if it was a scroll gesture
+            if (isTouchMove) {
+                return;
+            }
+
+            e.preventDefault();
+            e.stopPropagation();
+
             document.querySelectorAll('.date-carousel-item').forEach(el => {
                 const bgDiv = el.querySelector('.absolute');
                 bgDiv.className = 'absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300';
@@ -244,12 +275,23 @@
             if (navigator.vibrate) {
                 navigator.vibrate(50);
             }
-        });
+        };
+
+        // Use touchend for better mobile response
+        itemDiv.addEventListener('touchend', selectDate, { passive: false });
+        // Keep click for desktop
+        itemDiv.addEventListener('click', selectDate);
 
         carousel.appendChild(itemDiv);
 
         if (index === 0) {
-            setTimeout(() => itemDiv.click(), 100);
+            setTimeout(() => {
+                const firstItem = carousel.querySelector('.date-carousel-item');
+                if (firstItem) {
+                    const touchEndEvent = new Event('touchend', { bubbles: true });
+                    firstItem.dispatchEvent(touchEndEvent);
+                }
+            }, 100);
         }
     });
 
@@ -358,23 +400,31 @@
 // Enhanced touch handling for better swipe experience
 function setupTouchHandling() {
     const carousel = document.getElementById('date-carousel');
+    let touchStartTime = 0;
     let isScrolling = false;
     
-    carousel.addEventListener('touchstart', () => {
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartTime = Date.now();
+        isScrolling = false;
+    }, { passive: true });
+    
+    carousel.addEventListener('touchmove', () => {
         isScrolling = true;
-    });
+    }, { passive: true });
     
     carousel.addEventListener('touchend', () => {
+        // Reset scrolling state after a short delay
         setTimeout(() => {
             isScrolling = false;
-        }, 100);
-    });
+        }, 50);
+    }, { passive: true });
     
-    // Prevent click events during scrolling
+    // Prevent click events during scrolling with better detection
     carousel.addEventListener('click', (e) => {
-        if (isScrolling) {
+        if (isScrolling || (Date.now() - touchStartTime < 200)) {
             e.preventDefault();
             e.stopPropagation();
+            return false;
         }
     }, true);
 }
