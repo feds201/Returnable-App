@@ -464,10 +464,28 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault(); // stop normal form submit
 
+      const submitButton = document.querySelector('button[type="submit"]');
+      const originalButtonContent = submitButton.innerHTML;
+      
+      // Disable button and show loading state
+      submitButton.disabled = true;
+      submitButton.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-600 via-gray-700 to-gray-800 opacity-100 transition-opacity duration-300"></div>
+        <div class="relative flex items-center justify-center space-x-3">
+          <i class="fas fa-spinner animate-spin text-lg"></i>
+          <span>Processing...</span>
+        </div>
+      `;
+      submitButton.className = submitButton.className.replace('hover:scale-[1.02] hover:-translate-y-1', '');
+
       const pickupDate = document.getElementById('selected-pickup-date').value;
       const address = document.getElementById('address').value;
 
       if (!pickupDate || !address) {
+        // Reset button state if validation fails
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonContent;
+        submitButton.className = 'w-full p-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-red-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden';
         alert('Please select a date and enter your address.');
         return;
       }
@@ -539,10 +557,18 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById('selected-end-time').value = '';
           document.getElementById('address').value = '';
         } else {
+          // Reset button state on failure
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalButtonContent;
+          submitButton.className = 'w-full p-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-red-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden';
           alert('Failed to schedule PickUP: ' + (result.message || 'Unknown error'));
         }
       } catch (error) {
         console.error('Error submitting data:', error);
+        // Reset button state on error
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonContent;
+        submitButton.className = 'w-full p-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-red-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden';
         alert('An error occurred while scheduling PickUP.');
       }
     });
