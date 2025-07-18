@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,28 +40,36 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter overflow-x-hidden">
-    
+
     <!-- Animated background elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow animation-delay-2000"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-red-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse-slow animation-delay-4000"></div>
+        <div
+            class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow">
+        </div>
+        <div
+            class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse-slow animation-delay-2000">
+        </div>
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-red-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse-slow animation-delay-4000">
+        </div>
     </div>
 
     <!-- Main container -->
     <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
-        
+
         <!-- Header section with logo and title -->
         <div class="text-center mb-12 animate-slideIn">
             <div class="relative inline-block">
-                <img src="https://i.imgur.com/jB0FYA1.png" 
-                     alt="201 Logo" >
+                <img src="https://i.imgur.com/jB0FYA1.png" alt="201 Logo">
             </div>
-            <h1 class="mt-8 text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 tracking-tight">
+            <h1
+                class="mt-8 text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-200 tracking-tight">
                 Returnable Schedule
             </h1>
             <p class="mt-3 text-lg text-purple-200/80 font-medium">Thank You</p>
@@ -72,15 +81,16 @@
                 <!-- Glassmorphism background -->
                 <div class="absolute inset-0 bg-white/10 backdrop-blur-lg rounded-3xl"></div>
                 <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-3xl"></div>
-                
+
                 <!-- Form content -->
                 <div class="relative p-8 md:p-10">
                     <form action="#" method="POST" class="space-y-8">
-                        
+
                         <!-- Date selection section -->
                         <div class="space-y-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
                                     <i class="fas fa-calendar-alt text-white text-lg"></i>
                                 </div>
                                 <label for="pickup-date-carousel" class="text-xl font-bold text-white">
@@ -88,37 +98,37 @@
                                 </label>
                             </div>
 
-                            
-<!-- Enhanced carousel container -->
-<div class="relative">
-    <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
-    <div class="relative p-6">
-        <!-- Date carousel with swipe functionality -->
-        <div id="date-carousel" 
-             class="flex overflow-x-auto scroll-smooth space-x-4 scrollbar-hide touch-pan-x snap-x snap-mandatory"
-             style="scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x;">
-            <div class="flex items-center justify-center w-full text-purple-200 text-lg">
-                <i class="fas fa-spinner animate-spin mr-3"></i>
-                Loading dates...
-            </div>
-        </div>
-        
-        <!-- Swipe indicator -->
-        <div class="flex justify-center mt-4 space-x-2">
-            <div class="w-2 h-2 rounded-full bg-white/30"></div>
-            <div class="w-6 h-2 rounded-full bg-white/60"></div>
-            <div class="w-2 h-2 rounded-full bg-white/30"></div>
-        </div>
-        
-        <!-- Swipe hint -->
-        <div class="text-center mt-3">
-            <p class="text-sm text-purple-200/60 flex items-center justify-center">
-                <i class="fas fa-hand-pointer mr-2 animate-pulse"></i>
-                Swipe to browse dates
-            </p>
-        </div>
-    </div>
-</div>
+
+                            <!-- Enhanced carousel container -->
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
+                                <div class="relative p-6">
+                                    <!-- Date carousel with swipe functionality -->
+                                    <div id="date-carousel"
+                                        class="flex overflow-x-auto scroll-smooth space-x-4 scrollbar-hide touch-pan-x snap-x snap-mandatory"
+                                        style="scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x;">
+                                        <div class="flex items-center justify-center w-full text-purple-200 text-lg">
+                                            <i class="fas fa-spinner animate-spin mr-3"></i>
+                                            Loading dates...
+                                        </div>
+                                    </div>
+
+                                    <!-- Swipe indicator -->
+                                    <div class="flex justify-center mt-4 space-x-2">
+                                        <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                                        <div class="w-6 h-2 rounded-full bg-white/60"></div>
+                                        <div class="w-2 h-2 rounded-full bg-white/30"></div>
+                                    </div>
+
+                                    <!-- Swipe hint -->
+                                    <div class="text-center mt-3">
+                                        <p class="text-sm text-purple-200/60 flex items-center justify-center">
+                                            <i class="fas fa-hand-pointer mr-2 animate-pulse"></i>
+                                            Swipe to browse dates
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
 
@@ -130,32 +140,33 @@
                         <!-- Address section -->
                         <div class="space-y-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
                                     <i class="fas fa-map-marker-alt text-white text-lg"></i>
                                 </div>
                                 <label for="address" class="text-xl font-bold text-white">
                                     Delivery Address
                                 </label>
                             </div>
-                            
+
                             <div class="relative">
                                 <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
-                                <input type="text" 
-                                       id="address" 
-                                       name="address" 
-                                       placeholder="Enter your delivery address..." 
-                                       required 
-                                       class="relative w-full p-4 bg-transparent border-2 border-white/20 rounded-2xl text-white placeholder-purple-200/60 text-lg focus:border-white/60 focus:outline-none transition-all duration-300 focus:bg-white/5">
+                                <input type="text" id="address" name="address"
+                                    placeholder="Enter your delivery address..." required
+                                    class="relative w-full p-4 bg-transparent border-2 border-white/20 rounded-2xl text-white placeholder-purple-200/60 text-lg focus:border-white/60 focus:outline-none transition-all duration-300 focus:bg-white/5">
                             </div>
                         </div>
-                        
+
                         <!-- Submit button -->
-                        <button type="submit" 
-                                class="w-full p-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-red-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-r from-red-600 via-pink-600 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <button type="submit"
+                            class="w-full p-4 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-red-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-red-600 via-pink-600 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
                             <div class="relative flex items-center justify-center space-x-3">
                                 <span>Schedule Delivery</span>
-                                <i class="fas fa-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
+                                <i
+                                    class="fas fa-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
                             </div>
                         </button>
                     </form>
@@ -170,39 +181,39 @@
     </div>
 
     <script>
-      function populateDates(eventData) {
-    const carousel = document.getElementById('date-carousel');
-    carousel.innerHTML = '';
+        function populateDates(eventData) {
+            const carousel = document.getElementById('date-carousel');
+            carousel.innerHTML = '';
 
-    if (eventData.length === 0) {
-        carousel.innerHTML = `
+            if (eventData.length === 0) {
+                carousel.innerHTML = `
             <div class="flex items-center justify-center w-full text-purple-200 text-lg">
                 <i class="fas fa-exclamation-circle mr-3"></i>
                 No dates available
             </div>
         `;
-        return;
-    }
+                return;
+            }
 
-    eventData.forEach((item, index) => {
-        const date = new Date(item.date);
-        const formattedDate = date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric'
-        });
-        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+            eventData.forEach((item, index) => {
+                const date = new Date(item.date);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
 
-        const startTime = item.startTime ? formatTimeFromISO(item.startTime) : 'N/A';
-        const endTime = item.endTime ? formatTimeFromISO(item.endTime) : 'N/A';
+                const startTime = item.startTime ? formatTimeFromISO(item.startTime) : 'N/A';
+                const endTime = item.endTime ? formatTimeFromISO(item.endTime) : 'N/A';
 
-        const itemDiv = document.createElement('div');
-        itemDiv.classList.add(
-            'date-carousel-item', 'flex-shrink-0', 'w-36', 'cursor-pointer', 
-            'transform', 'transition-all', 'duration-300', 'hover:scale-105',
-            'hover:-translate-y-2', 'snap-center'
-        );
-        
-        itemDiv.innerHTML = `
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add(
+                    'date-carousel-item', 'flex-shrink-0', 'w-36', 'cursor-pointer',
+                    'transform', 'transition-all', 'duration-300', 'hover:scale-105',
+                    'hover:-translate-y-2', 'snap-center'
+                );
+
+                itemDiv.innerHTML = `
             <div class="relative group">
                 <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300"></div>
                 <div class="relative p-4 text-center">
@@ -222,84 +233,84 @@
                 </div>
             </div>
         `;
-        
-        itemDiv.dataset.date = item.date;
-        itemDiv.dataset.startTime = item.startTime;
-        itemDiv.dataset.endTime = item.endTime;
 
-        // Improved mobile interaction handling
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let isTouchMove = false;
+                itemDiv.dataset.date = item.date;
+                itemDiv.dataset.startTime = item.startTime;
+                itemDiv.dataset.endTime = item.endTime;
 
-        itemDiv.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            isTouchMove = false;
-        }, { passive: true });
+                // Improved mobile interaction handling
+                let touchStartX = 0;
+                let touchStartY = 0;
+                let isTouchMove = false;
 
-        itemDiv.addEventListener('touchmove', (e) => {
-            const touchEndX = e.touches[0].clientX;
-            const touchEndY = e.touches[0].clientY;
-            const deltaX = Math.abs(touchEndX - touchStartX);
-            const deltaY = Math.abs(touchEndY - touchStartY);
-            
-            // If movement is more than 10px, consider it a scroll
-            if (deltaX > 10 || deltaY > 10) {
-                isTouchMove = true;
-            }
-        }, { passive: true });
+                itemDiv.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    isTouchMove = false;
+                }, { passive: true });
 
-        const selectDate = (e) => {
-            // Prevent action if it was a scroll gesture
-            if (isTouchMove) {
-                return;
-            }
+                itemDiv.addEventListener('touchmove', (e) => {
+                    const touchEndX = e.touches[0].clientX;
+                    const touchEndY = e.touches[0].clientY;
+                    const deltaX = Math.abs(touchEndX - touchStartX);
+                    const deltaY = Math.abs(touchEndY - touchStartY);
 
-            e.preventDefault();
-            e.stopPropagation();
+                    // If movement is more than 10px, consider it a scroll
+                    if (deltaX > 10 || deltaY > 10) {
+                        isTouchMove = true;
+                    }
+                }, { passive: true });
 
-            document.querySelectorAll('.date-carousel-item').forEach(el => {
-                const bgDiv = el.querySelector('.absolute');
-                bgDiv.className = 'absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300';
+                const selectDate = (e) => {
+                    // Prevent action if it was a scroll gesture
+                    if (isTouchMove) {
+                        return;
+                    }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    document.querySelectorAll('.date-carousel-item').forEach(el => {
+                        const bgDiv = el.querySelector('.absolute');
+                        bgDiv.className = 'absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300';
+                    });
+
+                    const selectedBg = itemDiv.querySelector('.absolute');
+                    selectedBg.className = 'absolute inset-0 bg-gradient-to-br from-red-500/80 to-pink-500/80 rounded-2xl backdrop-blur-sm border-2 border-red-400 shadow-xl shadow-red-500/50 transition-all duration-300';
+
+                    document.getElementById('selected-pickup-date').value = item.date;
+                    document.getElementById('selected-start-time').value = item.startTime;
+                    document.getElementById('selected-end-time').value = item.endTime;
+
+                    // Add haptic feedback for mobile
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50);
+                    }
+                };
+
+                // Use touchend for better mobile response
+                itemDiv.addEventListener('touchend', selectDate, { passive: false });
+                // Keep click for desktop
+                itemDiv.addEventListener('click', selectDate);
+
+                carousel.appendChild(itemDiv);
+
+                if (index === 0) {
+                    setTimeout(() => {
+                        const firstItem = carousel.querySelector('.date-carousel-item');
+                        if (firstItem) {
+                            const touchEndEvent = new Event('touchend', { bubbles: true });
+                            firstItem.dispatchEvent(touchEndEvent);
+                        }
+                    }, 100);
+                }
             });
 
-            const selectedBg = itemDiv.querySelector('.absolute');
-            selectedBg.className = 'absolute inset-0 bg-gradient-to-br from-red-500/80 to-pink-500/80 rounded-2xl backdrop-blur-sm border-2 border-red-400 shadow-xl shadow-red-500/50 transition-all duration-300';
-
-            document.getElementById('selected-pickup-date').value = item.date;
-            document.getElementById('selected-start-time').value = item.startTime;
-            document.getElementById('selected-end-time').value = item.endTime;
-            
-            // Add haptic feedback for mobile
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-        };
-
-        // Use touchend for better mobile response
-        itemDiv.addEventListener('touchend', selectDate, { passive: false });
-        // Keep click for desktop
-        itemDiv.addEventListener('click', selectDate);
-
-        carousel.appendChild(itemDiv);
-
-        if (index === 0) {
-            setTimeout(() => {
-                const firstItem = carousel.querySelector('.date-carousel-item');
-                if (firstItem) {
-                    const touchEndEvent = new Event('touchend', { bubbles: true });
-                    firstItem.dispatchEvent(touchEndEvent);
-                }
-            }, 100);
+            setupSwipeIndicators();
         }
-    });
 
-    setupSwipeIndicators();
-}
 
-      
-      function setupCarouselNavigation() {
+        function setupCarouselNavigation() {
             const prevButton = document.getElementById('prev-carousel-button');
             const nextButton = document.getElementById('next-carousel-button');
             const carousel = document.getElementById('date-carousel');
@@ -318,9 +329,9 @@
             try {
                 const date = new Date(isoString);
                 if (isNaN(date.getTime())) return 'N/A';
-                return date.toLocaleTimeString('en-US', { 
-                    hour: '2-digit', 
-                    minute: '2-digit', 
+                return date.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
                     hour12: true,
                     timeZone: 'UTC'
                 });
@@ -338,9 +349,12 @@
             </div>
         `;
 
-        const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxQ90CZG79JXejJXF8_MYpXrLcb5p9WNMQ6r6fUNqAcB7P--KttpxSGl8q2WYm7Rcbm/exec';
-        
-        fetch(appsScriptUrl)
+        const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbw8YyPA6bd8sBhYTabJyA2WmavU-bKWbPhjJSoFjmfqaPXKSnF0YAGtPHzDpOYGCLQt/exec';
+
+        fetch(appsScriptUrl, {
+            method: 'GET',
+            mode: 'cors'
+        })
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();
@@ -364,74 +378,74 @@
             });
         });
         function setupSwipeIndicators() {
-    const carousel = document.getElementById('date-carousel');
-    const indicators = document.querySelectorAll('.w-2, .w-6');
-    
-    // Update indicators based on scroll position
-    carousel.addEventListener('scroll', () => {
-        const scrollLeft = carousel.scrollLeft;
-        const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
-        const scrollPercentage = scrollLeft / scrollWidth;
-        
-        // Reset all indicators
-        indicators.forEach(indicator => {
-            indicator.className = 'w-2 h-2 rounded-full bg-white/30 transition-all duration-300';
-        });
-        
-        // Highlight current indicator
-        const currentIndex = Math.round(scrollPercentage * (indicators.length - 1));
-        if (indicators[currentIndex]) {
-            indicators[currentIndex].className = 'w-6 h-2 rounded-full bg-white/60 transition-all duration-300';
-        }
-    });
-    
-    // Hide swipe hint after first interaction
-    let hasInteracted = false;
-    carousel.addEventListener('scroll', () => {
-        if (!hasInteracted) {
-            hasInteracted = true;
-            const swipeHint = document.querySelector('.text-purple-200\\/60').parentElement;
-            swipeHint.style.opacity = '0';
-            setTimeout(() => swipeHint.style.display = 'none', 300);
-        }
-    });
-}
+            const carousel = document.getElementById('date-carousel');
+            const indicators = document.querySelectorAll('.w-2, .w-6');
 
-// Enhanced touch handling for better swipe experience
-function setupTouchHandling() {
-    const carousel = document.getElementById('date-carousel');
-    let touchStartTime = 0;
-    let isScrolling = false;
-    
-    carousel.addEventListener('touchstart', (e) => {
-        touchStartTime = Date.now();
-        isScrolling = false;
-    }, { passive: true });
-    
-    carousel.addEventListener('touchmove', () => {
-        isScrolling = true;
-    }, { passive: true });
-    
-    carousel.addEventListener('touchend', () => {
-        // Reset scrolling state after a short delay
-        setTimeout(() => {
-            isScrolling = false;
-        }, 50);
-    }, { passive: true });
-    
-    // Prevent click events during scrolling with better detection
-    carousel.addEventListener('click', (e) => {
-        if (isScrolling || (Date.now() - touchStartTime < 200)) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-    }, true);
-}
+            // Update indicators based on scroll position
+            carousel.addEventListener('scroll', () => {
+                const scrollLeft = carousel.scrollLeft;
+                const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
+                const scrollPercentage = scrollLeft / scrollWidth;
 
-// Add CSS for hiding scrollbars
-const style = document.createElement('style');
-style.textContent = `
+                // Reset all indicators
+                indicators.forEach(indicator => {
+                    indicator.className = 'w-2 h-2 rounded-full bg-white/30 transition-all duration-300';
+                });
+
+                // Highlight current indicator
+                const currentIndex = Math.round(scrollPercentage * (indicators.length - 1));
+                if (indicators[currentIndex]) {
+                    indicators[currentIndex].className = 'w-6 h-2 rounded-full bg-white/60 transition-all duration-300';
+                }
+            });
+
+            // Hide swipe hint after first interaction
+            let hasInteracted = false;
+            carousel.addEventListener('scroll', () => {
+                if (!hasInteracted) {
+                    hasInteracted = true;
+                    const swipeHint = document.querySelector('.text-purple-200\\/60').parentElement;
+                    swipeHint.style.opacity = '0';
+                    setTimeout(() => swipeHint.style.display = 'none', 300);
+                }
+            });
+        }
+
+        // Enhanced touch handling for better swipe experience
+        function setupTouchHandling() {
+            const carousel = document.getElementById('date-carousel');
+            let touchStartTime = 0;
+            let isScrolling = false;
+
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartTime = Date.now();
+                isScrolling = false;
+            }, { passive: true });
+
+            carousel.addEventListener('touchmove', () => {
+                isScrolling = true;
+            }, { passive: true });
+
+            carousel.addEventListener('touchend', () => {
+                // Reset scrolling state after a short delay
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 50);
+            }, { passive: true });
+
+            // Prevent click events during scrolling with better detection
+            carousel.addEventListener('click', (e) => {
+                if (isScrolling || (Date.now() - touchStartTime < 200)) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }, true);
+        }
+
+        // Add CSS for hiding scrollbars
+        const style = document.createElement('style');
+        style.textContent = `
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }
@@ -440,13 +454,74 @@ style.textContent = `
         scrollbar-width: none;
     }
 `;
-document.head.appendChild(style);
+        document.head.appendChild(style);
 
-// Initialize touch handling when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    setupTouchHandling();
-});
+        // Initialize touch handling when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            setupTouchHandling();
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // stop normal form submit
+
+                const pickupDate = document.getElementById('selected-pickup-date').value;
+                const address = document.getElementById('address').value;
+
+                if (!pickupDate || !address) {
+                    alert('Please select a date and enter your address.');
+                    return;
+                }
+
+                console.log('Submitting data:', {
+                    pickupDate: pickupDate,
+                    address: address
+                });
+
+                const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "text/plain;charset=utf-8 ");
+
+                const raw = JSON.stringify({
+                    mode: "submit",
+                    pickupDate: pickupDate,
+                    address: address
+                });
+
+                const requestOptions = {
+                    method: "POST",
+                    mode: "cors",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow"
+                };
+
+                try {
+                    const response = await fetch(appsScriptUrl, requestOptions);
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert('Delivery scheduled successfully! 🎉');
+                        form.reset();
+
+                        // Clear hidden fields
+                        document.getElementById('selected-pickup-date').value = '';
+                        document.getElementById('selected-start-time').value = '';
+                        document.getElementById('selected-end-time').value = '';
+                    } else {
+                        alert('Failed to schedule delivery: ' + (result.message || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Error submitting data:', error);
+                    alert('An error occurred while scheduling delivery.');
+                }
+            });
+        });
+
 
     </script>
 </body>
+
 </html>
