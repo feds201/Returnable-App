@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Schedule</title>
+    <title>PickUp Schedule</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -43,6 +43,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Places API with Rochester Hills focus -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete"></script>
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 font-inter overflow-x-hidden">
@@ -145,15 +147,20 @@
                                     <i class="fas fa-map-marker-alt text-white text-lg"></i>
                                 </div>
                                 <label for="address" class="text-xl font-bold text-white">
-                                    Delivery Address
+                                    PickUp Address
                                 </label>
                             </div>
 
                             <div class="relative">
                                 <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
                                 <input type="text" id="address" name="address"
-                                    placeholder="Enter your delivery address..." required
+                                    placeholder="Enter your PickUp address..." required autocomplete="on"
                                     class="relative w-full p-4 bg-transparent border-2 border-white/20 rounded-2xl text-white placeholder-purple-200/60 text-lg focus:border-white/60 focus:outline-none transition-all duration-300 focus:bg-white/5">
+                                
+                                <!-- Suggestions dropdown -->
+                                <div id="address-suggestions" class="absolute top-full left-0 right-0 mt-2 bg-black/80 backdrop-blur-lg rounded-2xl border border-white/20 max-h-60 overflow-y-auto z-10 hidden">
+                                    <!-- Suggestions will be populated here -->
+                                </div>
                             </div>
                         </div>
 
@@ -164,7 +171,7 @@
                                 class="absolute inset-0 bg-gradient-to-r from-red-600 via-pink-600 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
                             <div class="relative flex items-center justify-center space-x-3">
-                                <span>Schedule Delivery</span>
+                                <span>Schedule PickUp</span>
                                 <i
                                     class="fas fa-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"></i>
                             </div>
@@ -459,6 +466,214 @@
         // Initialize touch handling when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             setupTouchHandling();
+            // Google Places will be initialized via callback
+        });
+
+        // Google Places Autocomplete initialization
+        function initAutocomplete() {
+            const addressInput = document.getElementById('address');
+            
+            // Create autocomplete object with Rochester Hills focus
+            const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+                types: ['address'],
+                componentRestrictions: { country: 'us' },
+                fields: ['place_id', 'geometry', 'name', 'formatted_address'],
+                // Bias results to Rochester Hills, Michigan area
+                bounds: {
+                    north: 42.7081,
+                    south: 42.6281,
+                    east: -83.0897,
+                    west: -83.1997
+                },
+                strictBounds: false // Allow addresses outside bounds but prefer Rochester Hills
+            });
+
+            // Set location bias to Rochester Hills center
+            const rochesterHillsCenter = new google.maps.LatLng(42.6583, -83.1497);
+            autocomplete.setBounds(new google.maps.LatLngBounds(
+                new google.maps.LatLng(42.6281, -83.1997), // SW
+                new google.maps.LatLng(42.7081, -83.0897)  // NE
+            ));
+
+            // Style the Google suggestions dropdown to match your theme
+            const pac_container = document.getElementsByClassName('pac-container')[0];
+            if (pac_container) {
+                pac_container.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                pac_container.style.backdropFilter = 'blur(16px)';
+                pac_container.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                pac_container.style.borderRadius = '16px';
+                pac_container.style.zIndex = '9999';
+            }
+
+            // Handle place selection
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                
+                if (!place.geometry) {
+                    console.log("No details available for input: '" + place.name + "'");
+                    return;
+                }
+
+                // You can use place.formatted_address for the complete address
+                console.log('Selected place:', place.formatted_address);
+            });
+
+            // Add custom styling to Google's suggestions
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList') {
+                        const pacContainer = document.querySelector('.pac-container');
+                        if (pacContainer && !pacContainer.classList.contains('styled')) {
+                            pacContainer.classList.add('styled');
+                            pacContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                            pacContainer.style.backdropFilter = 'blur(16px)';
+                            pacContainer.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                            pacContainer.style.borderRadius = '16px';
+                            pacContainer.style.marginTop = '8px';
+                            pacContainer.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.5)';
+                            
+                            // Style individual suggestion items
+                            const pacItems = pacContainer.querySelectorAll('.pac-item');
+                            pacItems.forEach(item => {
+                                item.style.color = 'white';
+                                item.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+                                item.style.padding = '12px 16px';
+                                
+                                item.addEventListener('mouseenter', function() {
+                                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                });
+                                
+                                item.addEventListener('mouseleave', function() {
+                                    this.style.backgroundColor = 'transparent';
+                                });
+                            });
+                            
+                            // Style the query text
+                            const pacQueryItems = pacContainer.querySelectorAll('.pac-item-query');
+                            pacQueryItems.forEach(item => {
+                                item.style.color = '#a855f7'; // Purple color for matching text
+                            });
+                        }
+                    }
+                });
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        }
+
+        // Fallback address suggestions if Google API fails - Rochester Hills specific
+        function setupFallbackAddressSuggestions() {
+            const addressInput = document.getElementById('address');
+            const suggestionsDiv = document.getElementById('address-suggestions');
+            
+            // Rochester Hills area specific addresses
+            const rochesterHillsAddresses = [
+                // Popular neighborhoods and subdivisions
+                "Brooklands Golf & Country Club, Rochester Hills, MI",
+                "Stoney Creek Village, Rochester Hills, MI", 
+                "Dutton Farms, Rochester Hills, MI",
+                "Forest Bay, Rochester Hills, MI",
+                "Meadowbrook Village, Rochester Hills, MI",
+                "Buckingham Estates, Rochester Hills, MI",
+                "Windshire Park, Rochester Hills, MI",
+                "Brookdale Commons, Rochester Hills, MI",
+                
+                // Main streets and areas
+                "Rochester Road, Rochester Hills, MI",
+                "Livernois Road, Rochester Hills, MI",
+                "Adams Road, Rochester Hills, MI",
+                "Auburn Road, Rochester Hills, MI",
+                "Crooks Road, Rochester Hills, MI",
+                "Walton Boulevard, Rochester Hills, MI",
+                "Tienken Road, Rochester Hills, MI",
+                "Hamlin Road, Rochester Hills, MI",
+                
+                // Apartment complexes and condos
+                "Brookdale Apartments, Rochester Hills, MI",
+                "Village Green of Rochester Hills, MI",
+                "Crosswinds Communities, Rochester Hills, MI",
+                "Sunrise Assisted Living, Rochester Hills, MI",
+                "Somerset Park Apartments, Rochester Hills, MI",
+                
+                // Near Oakland University area
+                "Oakland University Housing, Rochester Hills, MI",
+                "University Drive, Rochester Hills, MI",
+                "OU Student Housing, Rochester Hills, MI",
+                
+                // Shopping and landmarks
+                "Rochester Hills City Hall area",
+                "Great Lakes Crossing area, Auburn Hills, MI",
+                "Village of Rochester Hills",
+                "Downtown Rochester, MI"
+            ];
+
+            let selectedIndex = -1;
+
+            addressInput.addEventListener('input', function() {
+                // Only use fallback if Google Places isn't available
+                if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+                    const query = this.value.toLowerCase().trim();
+                    
+                    if (query.length < 2) {
+                        hideSuggestions();
+                        return;
+                    }
+
+                    const filteredSuggestions = rochesterHillsAddresses.filter(address => 
+                        address.toLowerCase().includes(query)
+                    );
+
+                    if (filteredSuggestions.length > 0) {
+                        showSuggestions(filteredSuggestions, query);
+                    } else {
+                        hideSuggestions();
+                    }
+                }
+            });
+
+            function showSuggestions(suggestions, query) {
+                selectedIndex = -1;
+                suggestionsDiv.innerHTML = '';
+                
+                suggestions.slice(0, 6).forEach((suggestion, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'suggestion-item p-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200 border-b border-white/10 last:border-b-0';
+                    
+                    const highlightedText = suggestion.replace(
+                        new RegExp(`(${query})`, 'gi'),
+                        '<span class="text-purple-300 font-semibold">$1</span>'
+                    );
+                    
+                    div.innerHTML = `
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt text-purple-400 text-sm"></i>
+                            <span class="text-sm">${highlightedText}</span>
+                        </div>
+                    `;
+                    
+                    div.addEventListener('click', () => {
+                        addressInput.value = suggestion;
+                        hideSuggestions();
+                    });
+                    
+                    suggestionsDiv.appendChild(div);
+                });
+                
+                suggestionsDiv.classList.remove('hidden');
+            }
+
+            function hideSuggestions() {
+                suggestionsDiv.classList.add('hidden');
+                selectedIndex = -1;
+            }
+        }
+
+        // Initialize fallback suggestions
+        document.addEventListener('DOMContentLoaded', () => {
+            setupFallbackAddressSuggestions();
         });
 
 
@@ -503,22 +718,187 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        alert('Delivery scheduled successfully! 🎉');
-                        form.reset();
-
-                        // Clear hidden fields
+                        showThankYouSection();
+                        
+                        // Clear form data
                         document.getElementById('selected-pickup-date').value = '';
                         document.getElementById('selected-start-time').value = '';
                         document.getElementById('selected-end-time').value = '';
+                        document.getElementById('address').value = '';
                     } else {
-                        alert('Failed to schedule delivery: ' + (result.message || 'Unknown error'));
+                        alert('Failed to schedule PickUP: ' + (result.message || 'Unknown error'));
                     }
                 } catch (error) {
                     console.error('Error submitting data:', error);
-                    alert('An error occurred while scheduling delivery.');
+                    alert('An error occurred while scheduling PickUP.');
                 }
             });
         });
+
+        // Array of inspirational quotes about environment and sustainability
+        const inspirationalQuotes = [
+            {
+                quote: "The greatest threat to our planet is the belief that someone else will save it.",
+                author: "Robert Swan, Polar Explorer"
+            },
+            {
+                quote: "We do not inherit the earth from our ancestors; we borrow it from our children.",
+                author: "Native American Proverb"
+            },
+            {
+                quote: "The Earth does not belong to us; we belong to the Earth.",
+                author: "Chief Seattle"
+            },
+            {
+                quote: "What we are doing to the forests of the world is but a mirror reflection of what we are doing to ourselves and to one another.",
+                author: "Mahatma Gandhi"
+            },
+            {
+                quote: "Be the change you wish to see in the world.",
+                author: "Mahatma Gandhi"
+            },
+            {
+                quote: "The environment is where we all meet; where we all have a mutual interest; it is the one thing all of us share.",
+                author: "Lady Bird Johnson"
+            },
+            {
+                quote: "Every time we turn our heads the other way when we see the law flouted, when we tolerate what we know to be wrong, when we close our eyes and ears to the corrupt because we are too busy or too frightened, when we fail to speak up and speak out, we strike a blow against freedom and decency and justice.",
+                author: "Robert F. Kennedy"
+            },
+            {
+                quote: "The best time to plant a tree was 20 years ago. The second best time is now.",
+                author: "Chinese Proverb"
+            },
+            {
+                quote: "Progress is impossible without change, and those who cannot change their minds cannot change anything.",
+                author: "George Bernard Shaw"
+            },
+            {
+                quote: "We won't have a society if we destroy the environment.",
+                author: "Margaret Mead"
+            },
+            {
+                quote: "The environment and the economy are really both two sides of the same coin. If we cannot sustain the environment, we cannot sustain ourselves.",
+                author: "Wangari Maathai"
+            },
+            {
+                quote: "What's the use of a fine house if you haven't got a tolerable planet to put it on?",
+                author: "Henry David Thoreau"
+            }
+        ];
+
+        // Function to get random quote
+        function getRandomQuote() {
+            return inspirationalQuotes[Math.floor(Math.random() * inspirationalQuotes.length)];
+        }
+
+        // Replace date carousel with thank you section
+        function showThankYouSection() {
+            const dateSection = document.querySelector('.space-y-4');
+            const randomQuote = getRandomQuote();
+            
+            dateSection.innerHTML = `
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-check text-white text-lg"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-white">
+                        Thank You! 🎉
+                    </h2>
+                </div>
+
+                <!-- Success message -->
+                <div class="relative mb-6">
+                    <div class="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-600/20 rounded-2xl backdrop-blur-sm"></div>
+                    <div class="relative p-6 text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center animate-glow">
+                            <i class="fas fa-check text-white text-2xl"></i>
+                        </div>
+                        <p class="text-green-200 mb-4 leading-relaxed">
+                            Your PickUp has been scheduled successfully! We will make sure to swing by your address on that day.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Share message -->
+                <div class="relative mb-6">
+                    <div class="absolute inset-0 bg-black/20 rounded-2xl backdrop-blur-sm"></div>
+                    <div class="relative p-4 text-center">
+                        <p class="text-purple-300/90 text-sm">
+                            <i class="fas fa-share-alt mr-2"></i>
+                            Please share this in your neighborhood!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Random inspirational quote -->
+                <div class="relative mb-6">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl backdrop-blur-sm border border-purple-400/20"></div>
+                    <div class="relative p-5">
+                        <div class="text-center">
+                            <i class="fas fa-quote-left text-purple-300/60 text-lg mb-3"></i>
+                            <blockquote class="text-purple-200/90 italic text-sm mb-3 leading-relaxed">
+                                "${randomQuote.quote}"
+                            </blockquote>
+                            <cite class="text-purple-300/70 text-xs">- ${randomQuote.author}</cite>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact info -->
+                <div class="relative">
+                    <div class="absolute inset-0 bg-black/30 rounded-2xl backdrop-blur-sm"></div>
+                    <div class="relative p-5">
+                        <p class="text-purple-200/80 text-sm mb-3 text-center">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            Have any questions?
+                        </p>
+                        <div class="space-y-3">
+                            <a href="mailto:feds201@gmail.com" class="flex items-center justify-center text-blue-300 hover:text-blue-200 transition-colors text-sm group">
+                                <i class="fas fa-envelope mr-2 group-hover:scale-110 transition-transform"></i>
+                                feds201@gmail.com
+                            </a>
+                            <a href="https://instagram.com/feds201" target="_blank" class="flex items-center justify-center text-pink-300 hover:text-pink-200 transition-colors text-sm group">
+                                <i class="fab fa-instagram mr-2 group-hover:scale-110 transition-transform"></i>
+                                @feds201
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Hide the address section and submit button
+            document.querySelector('.space-y-4:nth-of-type(2)').style.display = 'none';
+            document.querySelector('button[type="submit"]').style.display = 'none';
+            
+            // Add a "Schedule Another" button
+            const form = document.querySelector('form');
+            const newButton = document.createElement('button');
+            newButton.type = 'button';
+            newButton.className = 'w-full p-4 bg-gradient-to-r from-purple-500 via-pink-500 to-red-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transform hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden mt-6';
+            newButton.innerHTML = `
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative flex items-center justify-center space-x-3">
+                    <span>Schedule Another PickUp</span>
+                    <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-300"></i>
+                </div>
+            `;
+            
+            newButton.addEventListener('click', () => {
+                location.reload();
+            });
+            
+            form.appendChild(newButton);
+        }
+
+        // Remove the old success modal functions
+        function showSuccessMessage() {
+            // This function is no longer used
+        }
+
+        function closeSuccessMessage() {
+            // This function is no longer used
+        }
 
 
     </script>
