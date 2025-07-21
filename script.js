@@ -170,7 +170,6 @@ function formatTimeFromISO(isoString) {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-      timeZone: "UTC",
     });
   } catch (error) {
     console.error("Error parsing time:", error);
@@ -525,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
         address: address
       });
 
-      const appsScriptUrl = "https://script.google.com/macros/s/AKfycbw8YyPA6bd8sBhYTabJyA2WmavU-bKWbPhjJSoFjmfqaPXKSnF0YAGtPHzDpOYGCLQt/exec";
+      const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxWOuGt-PJpcqNbIeUuLzNNBE30Az2lftSCWGGjyuIMpQjJ72DlUMT8CQLEVOmVDXj_/exec";
 
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "text/plain;charset=utf-8 ");
