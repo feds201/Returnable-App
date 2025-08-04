@@ -170,7 +170,7 @@ function formatTimeFromISO(isoString) {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-      // timeZone: "EST",
+      timeZone: "America/New_York",
     });
   } catch (error) {
     console.error("Error parsing time:", error);
