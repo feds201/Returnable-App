@@ -170,6 +170,7 @@ function formatTimeFromISO(isoString) {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+      timeZone: "America/New_York",
     });
   } catch (error) {
     console.error("Error parsing time:", error);
@@ -489,35 +490,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Check if address appears to be in Rochester Hills area
-    //   const addressLower = address.toLowerCase();
-    //   const isInServiceArea = (
-    //     addressLower.includes('rochester hills') ||
-    //     addressLower.includes('rochester, mi') ||
-    //     addressLower.includes('auburn hills') ||
-    //     addressLower.includes('troy, mi') ||
-    //     addressLower.includes('oakland university') ||
-    //     addressLower.includes('pontiac, mi') ||
-    //     addressLower.includes('bloomfield') ||
-    //     addressLower.includes('birmingham, mi') ||
-    //     addressLower.includes('48309') ||
-    //     addressLower.includes('48307') ||
-    //     addressLower.includes('48306') ||
-    //     addressLower.includes('48073') ||
-    //     addressLower.includes('48084')
-    //   );
-
-    //   if (!isInServiceArea) {
-    //     const confirmOutsideArea = confirm(
-    //       'Your address appears to be outside our primary service area (Rochester Hills and nearby areas). ' +
-    //       'We may not be able to provide pickup service to this location. ' +
-    //       'Would you like to proceed anyway?'
-    //     );
-        
-    //     if (!confirmOutsideArea) {
-    //       return;
-    //     }
-    //   }
 
       console.log('Submitting data:', {
         pickupDate: pickupDate,
