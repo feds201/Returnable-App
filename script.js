@@ -421,7 +421,7 @@ function showThankYouSection() {
   // Hide the address section and submit button
   const addressSection = document.querySelector(".space-y-4:nth-of-type(2)");
   const submitButton = document.querySelector('button[type="submit"]');
-  
+
   if (addressSection) addressSection.style.display = "none";
   if (submitButton) submitButton.style.display = "none";
 
@@ -459,14 +459,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Setup form submission
   const form = document.querySelector("form");
-  
+
   if (form) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault(); // stop normal form submit
 
       const submitButton = document.querySelector('button[type="submit"]');
       const originalButtonContent = submitButton.innerHTML;
-      
+
       // Disable button and show loading state
       submitButton.disabled = true;
       submitButton.innerHTML = `
@@ -496,22 +496,14 @@ document.addEventListener("DOMContentLoaded", () => {
         address: address
       });
 
-      const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxWOuGt-PJpcqNbIeUuLzNNBE30Az2lftSCWGGjyuIMpQjJ72DlUMT8CQLEVOmVDXj_/exec";
-
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "text/plain;charset=utf-8 ");
-
-      const raw = JSON.stringify({
-        mode: "submit",
-        pickupDate: pickupDate,
-        address: address
-      });
+      const appsScriptUrl = "https://developer.feds201.com/webhook/0c5fbcfc-db82-4d72-9ac5-d8d387d3c372";
+      const formdata = new FormData();
+      formdata.append("Date", pickupDate);
+      formdata.append("Address", address);
 
       const requestOptions = {
         method: "POST",
-        mode: "cors",
-        headers: myHeaders,
-        body: raw,
+        body: formdata,
         redirect: "follow"
       };
 
@@ -519,9 +511,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(appsScriptUrl, requestOptions);
         const result = await response.json();
 
-        if (result.success) {
+        if (true) {
           showThankYouSection();
-          
+
           // Clear form data
           document.getElementById('selected-pickup-date').value = '';
           document.getElementById('selected-start-time').value = '';
