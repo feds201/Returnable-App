@@ -496,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
         address: address
       });
 
-      const appsScriptUrl = "https://developer.feds201.com/webhook/0c5fbcfc-db82-4d72-9ac5-d8d387d3c372";
+      const appsScriptUrl = "https://n8n.dev.feds201.com/webhook-test/0c5fbcfc-db82-4d72-9ac5-d8d387d3c372";
       const formdata = new FormData();
       formdata.append("Date", pickupDate);
       formdata.append("Address", address);
