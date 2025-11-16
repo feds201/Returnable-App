@@ -13,17 +13,17 @@ function populateDates(eventData) {
   }
 
   eventData.forEach((item, index) => {
-    const date = new Date(item.date);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-    const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
+    const date = item.date;
+    // const formattedDate = date.toLocaleDateString("en-US", {
+    //   month: "short",
+    //   day: "numeric",
+    // });
+    // const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
 
     const startTime = item.startTime
-      ? formatTimeFromISO(item.startTime)
+      ? item.startTime
       : "N/A";
-    const endTime = item.endTime ? formatTimeFromISO(item.endTime) : "N/A";
+    const endTime = item.endTime ? item.endTime : "N/A";
 
     const itemDiv = document.createElement("div");
     itemDiv.classList.add(
@@ -43,8 +43,8 @@ function populateDates(eventData) {
             <div class="relative group">
                 <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 rounded-2xl backdrop-blur-sm border border-white/20 group-hover:border-white/40 transition-all duration-300"></div>
                 <div class="relative p-4 text-center">
-                    <div class="text-sm font-medium text-purple-200/80 mb-1">${dayName}</div>
-                    <div class="text-xl font-bold text-white mb-2">${formattedDate}</div>
+                    <div class="text-sm font-medium text-purple-200/80 mb-1"></div>
+                    <div class="text-xl font-bold text-white mb-2">${date}</div>
                     <div class="text-xs text-purple-200/70 space-y-1">
                         <div class="flex items-center justify-center space-x-1">
                             <i class="fas fa-clock text-xs"></i>
@@ -496,7 +496,9 @@ document.addEventListener("DOMContentLoaded", () => {
         address: address
       });
 
-      const appsScriptUrl = "https://n8n.dev.feds201.com/webhook-test/0c5fbcfc-db82-4d72-9ac5-d8d387d3c372";
+     
+
+      const appsScriptUrl =  "https://n8n.dev.feds201.com/webhook/0c5fbcfc-db82-4d72-9ac5-d8d387d3c372";
       const formdata = new FormData();
       formdata.append("Date", pickupDate);
       formdata.append("Address", address);
@@ -539,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Load dates from Google Sheets
-const appsScriptUrl = "https://script.google.com/macros/s/AKfycbw8YyPA6bd8sBhYTabJyA2WmavU-bKWbPhjJSoFjmfqaPXKSnF0YAGtPHzDpOYGCLQt/exec";
+const appsScriptUrl = "https://n8n.dev.feds201.com/webhook/18e3f7c8-dc35-4139-bd65-559795447ba1";
 
 // Enhanced loading state - wrap in a function to ensure DOM is ready
 function initializeDateLoading() {
