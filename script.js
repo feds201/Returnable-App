@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
      
 
-      const appsScriptUrl =  "https://n8n.dev.feds201.com/webhook/0c5fbcfc-db82-4d72-9ac5-d8d387d3c372";
+      const appsScriptUrl =  "https://n8n.dev.feds201.com/webhook/returnables";
       const formdata = new FormData();
       formdata.append("Date", pickupDate);
       formdata.append("Address", address);
@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Load dates from Google Sheets
-const appsScriptUrl = "https://n8n.dev.feds201.com/webhook/18e3f7c8-dc35-4139-bd65-559795447ba1";
+const appsScriptUrl = "https://n8n.dev.feds201.com/webhook/returnables";
 
 // Enhanced loading state - wrap in a function to ensure DOM is ready
 function initializeDateLoading() {
